@@ -1,16 +1,13 @@
 import React from 'react'
 
-class CurrentBooks extends React.Component{
+class SearchedBooks extends React.Component{
     state = {
         value: "currentlyReading"
     }
 
     render(){ 
-        const books = this.props.books;
+        const books = this.props.books; console.log('books', books);
         return (
-            <div className="bookshelf">
-            <h2 className="bookshelf-title">Currently Reading</h2>
-            <div className="bookshelf-books">
             <ol className="books-grid">
               {books.map((book)=> (
                 <li key={book.id}>
@@ -28,15 +25,13 @@ class CurrentBooks extends React.Component{
                       </div>
                     </div>
                     <div className="book-title">{book.title}</div>
-                    <div className="book-authors">{book.authors[0]}</div>
+                    <div className="book-authors">{book.authors.map(author => author)}</div>
                   </div>
                 </li>
             ))}
             </ol>
-            </div>
-            </div>
         )
     }
 }
 
-export default CurrentBooks
+export default SearchedBooks;

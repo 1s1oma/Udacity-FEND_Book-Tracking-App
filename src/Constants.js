@@ -41,3 +41,36 @@ let displayedCurrentBooks = [
       backgroundImage:"http://books.google.com/books/content?id=32haAAAAMAAJ&printsec=frontcover&img=1&zoom=1&imgtk=AFLRE72yckZ5f5bDFVIf7BGPbjA0KYYtlQ__nWB-hI_YZmZ-fScYwFy4O_fWOcPwf-pgv3pPQNJP_sT5J_xOUciD8WaKmevh1rUR-1jk7g1aCD_KeJaOpjVu0cm_11BBIUXdxbFkVMdi&source=gbs_api"
     }
   ]
+
+  
+  render() {console.log('here', this.state.currentBooks, this.state.allBooks, this.state.showSearchPage);
+    return (
+      <div className="app">
+        {this.state.showSearchPage ? 
+        ( <Route exact path='/Search' render={() => (
+          <Search searchHandler={this.handleSearch} />
+        )}/>) 
+        : 
+        (
+          <Route exact path='/' render={() => (
+          <div className="list-books">
+            <div className="list-books-title">
+              <h1>MyReads</h1>
+            </div>
+            <div className="list-books-content">
+              <div>
+               <CurrentBooks books={this.state.currentBooks} changeShelf={this.moveBook}/>
+               <WantToRead books={this.state.wantToReadBooks} changeShelf={this.moveBook}/>
+               <Read books={this.state.readBooks} changeShelf={this.moveBook}/>
+              </div>
+            </div>
+            <div className="open-search">
+              <Link to="/Search" onClick={() => this.setState({ showSearchPage: true })}>Add a book</Link>
+            </div>
+          </div>
+          )}/>
+        )}
+      </div>
+    )
+  }
+}

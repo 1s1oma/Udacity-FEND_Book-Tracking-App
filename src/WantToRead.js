@@ -1,11 +1,6 @@
 import React from 'react'
 
 class  WantToRead extends React.Component{
-  constructor(props){
-    super(props)
-
- }
-
 state = {
     value: "wantToRead"
 }

@@ -62,16 +62,13 @@ class BooksApp extends React.Component {
   });
 }
 
-  render() {console.log('here', this.state.currentBooks, this.state.allBooks);
+  render() {console.log('here', this.state.currentBooks, this.state.allBooks, this.state.showSearchPage);
     return (
       <div className="app">
-        {this.state.showSearchPage ? 
-        ( <Route exact path='/Search' render={() => (
+         <Route exact path='/Search' render={() => (
           <Search searchHandler={this.handleSearch} />
-        )}/>) 
-        : 
-        (
-          <Route exact path='/' render={() => (
+        )}/> 
+         <Route exact path='/' render={() => (
           <div className="list-books">
             <div className="list-books-title">
               <h1>MyReads</h1>
@@ -88,10 +85,9 @@ class BooksApp extends React.Component {
             </div>
           </div>
           )}/>
-        )}
-      </div>
+      </div>  
     )
   }
 }
 
-export default BooksApp
+export default BooksApp;
