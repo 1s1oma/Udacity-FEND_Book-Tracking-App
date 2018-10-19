@@ -16,7 +16,9 @@ class BooksApp extends React.Component {
 
     this.handleSearch = this.handleSearch.bind(this);
     this.moveBook = this.moveBook.bind(this);
+    this.getAuthors = this.getAuthors.bind(this);
   }
+
   state = {
     /**
      * TODO: Instead of using this state variable to keep track of which page
@@ -33,7 +35,7 @@ class BooksApp extends React.Component {
   }
   
   componentDidMount(){
-  BooksAPI.getAll().then(books => {console.log('b', books);
+  BooksAPI.getAll().then(books => {
       this.setState({
         currentBooks: books.filter(book => book.shelf === 'currentlyReading'),
         wantToReadBooks: books.filter(book => book.shelf === 'wantToRead'),
@@ -54,19 +56,45 @@ class BooksApp extends React.Component {
   moveBook(book, shelf){
   BooksAPI.update(book, shelf).then(() => {
     book.shelf=shelf;
+    //check if searched book is already on shelf. If not add it to the books, before filtering
+  if(this.state.allBooks.indexOf(book) === -1){
+    this.setState({
+        allBooks : this.state.allBooks.push(book),
+        currentBooks: this.state.allBooks.filter(book => book.shelf === 'currentlyReading'),
+        wantToReadBooks: this.state.allBooks.filter(book => book.shelf === 'wantToRead'),
+        readBooks: this.state.allBooks.filter(book => book.shelf === 'read')
+    });
+  }
+  else{
     this.setState({
       currentBooks: this.state.allBooks.filter(book => book.shelf === 'currentlyReading'),
       wantToReadBooks: this.state.allBooks.filter(book => book.shelf === 'wantToRead'),
       readBooks: this.state.allBooks.filter(book => book.shelf === 'read')
     });
-  });
+  }
+});
 }
 
-  render() {console.log('here', this.state.currentBooks, this.state.allBooks, this.state.showSearchPage);
+//Returns authors for books in separate lines  
+getAuthors(book){
+  let authors = [];
+  if(book.authors){
+  authors = (book.authors.map(author => {
+    let tempArray = [author, <br/>];
+    return tempArray;
+  })) 
+}
+else{
+  authors = "";
+}
+  return authors;
+}
+
+  render() {
     return (
       <div className="app">
          <Route exact path='/Search' render={() => (
-          <Search searchHandler={this.handleSearch} />
+          <Search searchHandler={this.handleSearch} shelfedBooks={this.state.allBooks} changeShelf={this.moveBook} authors={this.getAuthors}/>
         )}/> 
          <Route exact path='/' render={() => (
           <div className="list-books">
@@ -75,9 +103,9 @@ class BooksApp extends React.Component {
             </div>
             <div className="list-books-content">
               <div>
-               <CurrentBooks books={this.state.currentBooks} changeShelf={this.moveBook}/>
-               <WantToRead books={this.state.wantToReadBooks} changeShelf={this.moveBook}/>
-               <Read books={this.state.readBooks} changeShelf={this.moveBook}/>
+               <CurrentBooks books={this.state.currentBooks} changeShelf={this.moveBook} authors={this.getAuthors}/>
+               <WantToRead books={this.state.wantToReadBooks} changeShelf={this.moveBook} authors={this.getAuthors}/>
+               <Read books={this.state.readBooks} changeShelf={this.moveBook} authors={this.getAuthors}/>
               </div>
             </div>
             <div className="open-search">

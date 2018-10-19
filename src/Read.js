@@ -28,7 +28,7 @@ state = {
                       </div>
                     </div>
                     <div className="book-title">{book.title}</div>
-                    <div className="book-authors">{book.author}</div>
+                    <div className="book-authors">{/*this.props.authors(book)*/}</div>
                   </div>
                 </li>
             ))}

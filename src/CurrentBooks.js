@@ -6,7 +6,7 @@ class CurrentBooks extends React.Component{
     }
 
     render(){ 
-        const books = this.props.books;
+        const books = this.props.books; 
         return (
             <div className="bookshelf">
             <h2 className="bookshelf-title">Currently Reading</h2>
@@ -28,7 +28,7 @@ class CurrentBooks extends React.Component{
                       </div>
                     </div>
                     <div className="book-title">{book.title}</div>
-                    <div className="book-authors">{book.authors[0]}</div>
+                    <div className="book-authors">{/*this.props.authors(book)*/}</div>
                   </div>
                 </li>
             ))}

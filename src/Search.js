@@ -4,28 +4,50 @@ import * as BooksAPI from './BooksAPI';
 import SearchedBooks from './SearchedBooks';
 
 class Search extends React.Component{
+  constructor(props){
+    super(props)
+
+    this.updateShelfOfSearchedBooks = this.updateShelfOfSearchedBooks.bind(this);
+  }
 
   state={
     query:"",
     searchedBooks: []
   }
 
+  //Updates the query and also gets the books searched
   updateQuery = (query) =>{
-    try{
-    BooksAPI.search(query).then((books)=>{//this.setState({query: query});
+    BooksAPI.search(query).then((books)=>{
       this.setState({
         query: query,
         searchedBooks: Array.isArray(books) ? books : []
       });
-      console.log("yu",books, query, this.state.searchedBooks, Array.isArray(books));}
-    )}catch(error){console.log('e',error);}finally{console.log('fin');}
-  }
+  });
+}
   
   clearQuery = () =>{
     this.setState({query: " "})
-  }
+}
+
+//When the user types in the search bar, updated the diplayed books with the correct shelf
+updateShelfOfSearchedBooks(searchedBooks, shelfedBooks){
+  let books = searchedBooks.map(book => {
+    for(let i=0; i<shelfedBooks.length; i++){
+      if(book.id === shelfedBooks[i].id){
+        book.shelf = shelfedBooks[i].shelf
+      }
+      else{
+        book.shelf = "none";
+      }
+    }
+    this.setState({
+      searchedBooks: books
+    });
+  })
+}
 
     render(){
+
         return (
           <div className="search-books">
             <div className="search-books-bar">
@@ -40,12 +62,12 @@ class Search extends React.Component{
                   you don't find a specific author or title. Every search is limited by search terms.
                 */}
                   <input type="text" placeholder="Search by title or author" value={this.state.query}
-                  onChange={(event) => this.updateQuery(event.target.value)}/>{console.log('o',this.state.query)}
+                  onChange={(event) => {this.updateQuery(event.target.value); this.updateShelfOfSearchedBooks(this.state.searchedBooks, this.props.shelfedBooks);}}/>
 
               </div>
             </div>
             <div className="search-books-results">
-            <SearchedBooks books={this.state.searchedBooks}/>
+            <SearchedBooks searchedBooks={this.state.searchedBooks} shelfedBooks={this.props.shelfedBooks} changeShelf={this.props.changeShelf} authors={this.props.authors}/>
             </div>
         </div>
           )
