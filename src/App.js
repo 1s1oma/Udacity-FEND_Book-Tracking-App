@@ -1,12 +1,11 @@
+import {Link} from 'react-router-dom';
+import { Route } from 'react-router-dom';
+
 import React from 'react';
 import Search from './Search.js';
 import CurrentBooks from './CurrentBooks.js';
 import WantToRead from './WantToRead.js';
 import Read from './Read.js';
-
-import {Link} from 'react-router-dom';
-import { Route } from 'react-router-dom';
-
 import * as BooksAPI from './BooksAPI'
 import './App.css'
 
@@ -58,34 +57,31 @@ class BooksApp extends React.Component {
     book.shelf=shelf;
     //check if searched book is already on shelf. If not add it to the books, before filtering
   if(this.state.allBooks.indexOf(book) === -1){
-    this.setState({
-        allBooks : this.state.allBooks.push(book),
-        currentBooks: this.state.allBooks.filter(book => book.shelf === 'currentlyReading'),
-        wantToReadBooks: this.state.allBooks.filter(book => book.shelf === 'wantToRead'),
-        readBooks: this.state.allBooks.filter(book => book.shelf === 'read')
-    });
+    this.setState((prevState) => ({
+        allBooks : prevState.allBooks.push(book),
+        currentBooks: prevState.allBooks.filter(book => book.shelf === 'currentlyReading'),
+        wantToReadBooks: prevState.allBooks.filter(book => book.shelf === 'wantToRead'),
+        readBooks: prevState.allBooks.filter(book => book.shelf === 'read')
+    }));
   }
   else{
-    this.setState({
-      currentBooks: this.state.allBooks.filter(book => book.shelf === 'currentlyReading'),
-      wantToReadBooks: this.state.allBooks.filter(book => book.shelf === 'wantToRead'),
-      readBooks: this.state.allBooks.filter(book => book.shelf === 'read')
-    });
+    this.setState((prevState) => ({
+      currentBooks: prevState.allBooks.filter(book => book.shelf === 'currentlyReading'),
+      wantToReadBooks: prevState.allBooks.filter(book => book.shelf === 'wantToRead'),
+      readBooks: prevState.allBooks.filter(book => book.shelf === 'read')
+    }));
   }
 });
 }
 
 //Returns authors for books in separate lines  
 getAuthors(book){
-  let authors = [];
+  let authors;
   if(book.authors){
-  authors = (book.authors.map(author => {
-    let tempArray = [author, <br/>];
-    return tempArray;
-  })) 
-}
-else{
-  authors = "";
+    //just transforming authors to an array, that it appears on a line separately
+  authors = book.authors.map(author => {
+    return author;
+  })
 }
   return authors;
 }

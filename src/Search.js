@@ -18,9 +18,11 @@ class Search extends React.Component{
 
   //Updates the query and also gets the books searched
   updateQuery = (query) =>{
+    this.setState({
+      query: query
+    });
     BooksAPI.search(query).then((books)=>{
       this.setState({
-        query: query,
         searchedBooks: Array.isArray(books) ? books : []
       });
   }).then(() =>{
