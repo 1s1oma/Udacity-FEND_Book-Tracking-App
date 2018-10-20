@@ -1,24 +1,12 @@
 import React from 'react'
 
 class SearchedBooks extends React.Component{
-  constructor(props){
-    super(props)
-
-    this.setValue = this.setValue.bind(this);
-  }
-
   state = {
         value:"none"
   }
 
-  setValue(book){
-    this.setState({
-      value: book.shelf
-    })
-  }
-
     render(){ 
-        const searchedBooks = this.props.searchedBooks; 
+        const searchedBooks = this.props.searchedBooks != null ? this.props.searchedBooks : [];
         return (
             <ol className="books-grid">
               {searchedBooks.map((book)=> (
@@ -27,7 +15,7 @@ class SearchedBooks extends React.Component{
                     <div className="book-top">
                       <div className="book-cover" style={{ width: 128, height: 193, backgroundImage: `url(${book.imageLinks ? book.imageLinks.thumbnail: ""}` }}></div>
                       <div className="book-shelf-changer">
-                        <select value={this.state.value} onChange={(event) => {this.setValue(book); this.props.changeShelf(book, event.target.value);}}>
+                        <select value={book.shelf ? book.shelf : "none"} onChange={(event) => {this.props.changeShelf(book, event.target.value)}}>
                           <option value="move" disabled>Move to...</option>
                           <option value="currentlyReading">Currently Reading</option>
                           <option value="wantToRead">Want to Read</option>
@@ -37,7 +25,7 @@ class SearchedBooks extends React.Component{
                       </div>
                     </div>
                     <div className="book-title">{book.title}</div>
-                   <div className="book-authors">{/*this.props.authors(book)*/}</div> 
+                   <div className="book-authors">{this.props.authors(book)}</div> 
                   </div>
                 </li>
             ))}

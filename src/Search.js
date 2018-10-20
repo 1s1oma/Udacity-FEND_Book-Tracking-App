@@ -7,6 +7,7 @@ class Search extends React.Component{
   constructor(props){
     super(props)
 
+    this.updateQuery = this.updateQuery.bind(this);
     this.updateShelfOfSearchedBooks = this.updateShelfOfSearchedBooks.bind(this);
   }
 
@@ -22,6 +23,8 @@ class Search extends React.Component{
         query: query,
         searchedBooks: Array.isArray(books) ? books : []
       });
+  }).then(() =>{
+    this.updateShelfOfSearchedBooks(this.state.searchedBooks, this.props.shelfedBooks);
   });
 }
   
@@ -31,19 +34,25 @@ class Search extends React.Component{
 
 //When the user types in the search bar, updated the diplayed books with the correct shelf
 updateShelfOfSearchedBooks(searchedBooks, shelfedBooks){
-  let books = searchedBooks.map(book => {
-    for(let i=0; i<shelfedBooks.length; i++){
-      if(book.id === shelfedBooks[i].id){
-        book.shelf = shelfedBooks[i].shelf
-      }
-      else{
-        book.shelf = "none";
+  let finish = false;
+  let books = [];
+  if(searchedBooks.length !== 0){
+    books = searchedBooks.map((book)=>{
+      for(let j=0; j<shelfedBooks.length; j++){
+
+      if(book.id === shelfedBooks[j].id){
+          book.shelf = shelfedBooks[j].shelf;
       }
     }
-    this.setState({
-      searchedBooks: books
-    });
-  })
+    return book;
+  });
+  finish = true;
+ }
+ if(finish){
+  this.setState({
+  searchedBooks: books
+  });
+ }
 }
 
     render(){
@@ -62,7 +71,7 @@ updateShelfOfSearchedBooks(searchedBooks, shelfedBooks){
                   you don't find a specific author or title. Every search is limited by search terms.
                 */}
                   <input type="text" placeholder="Search by title or author" value={this.state.query}
-                  onChange={(event) => {this.updateQuery(event.target.value); this.updateShelfOfSearchedBooks(this.state.searchedBooks, this.props.shelfedBooks);}}/>
+                  onChange={(event) => {this.updateQuery(event.target.value)}}/>
 
               </div>
             </div>
