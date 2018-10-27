@@ -17,6 +17,6 @@ npm start
 
 ## Functionality
 Your selected books can go in 3 shelves: currently reading, want to read, read
-Click on book arrow to change it's shelf. The search works like any normal search bar
+Click on book arrow to change it's shelf. You can search for books, using the search bar 
 
 
