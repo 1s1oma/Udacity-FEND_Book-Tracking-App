@@ -58,7 +58,7 @@ class BooksApp extends React.Component {
     //check if searched book is already on shelf. If not add it to the books, before filtering
   if(this.state.allBooks.indexOf(book) === -1){
     this.setState((prevState) => ({
-        allBooks : prevState.allBooks.push(book),
+        allBooks : prevState.allBooks.concat(book),
         currentBooks: prevState.allBooks.filter(book => book.shelf === 'currentlyReading'),
         wantToReadBooks: prevState.allBooks.filter(book => book.shelf === 'wantToRead'),
         readBooks: prevState.allBooks.filter(book => book.shelf === 'read')
